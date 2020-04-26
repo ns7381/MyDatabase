@@ -33,7 +33,7 @@ public final class SQLVisitor extends MySQLStatementBaseVisitor<ASTNode> {
         return new IdentifierSegment(ctx.getText());
     }
 
-    @Override
+  /*  @Override
     public ASTNode visitSelect(MySQLStatementParser.SelectContext ctx) {
         TableNameSegment tableName = (TableNameSegment) visit(ctx.tableName());
         ColumnNameSegment columnName = (ColumnNameSegment) visit(ctx.columnName());
@@ -41,7 +41,7 @@ public final class SQLVisitor extends MySQLStatementBaseVisitor<ASTNode> {
         ValueSegment value = (ValueSegment) visit(ctx.value());
         ComparisonOperatorSegment comparisonOperator = (ComparisonOperatorSegment) visit(ctx.value());
         return new SelectStatement(tableName, columnName, compareColumnName, comparisonOperator, value);
-    }
+    }*/
 
     @Override
     public ASTNode visitColumnName(MySQLStatementParser.ColumnNameContext ctx) {
@@ -55,11 +55,11 @@ public final class SQLVisitor extends MySQLStatementBaseVisitor<ASTNode> {
         return new TableNameSegment(identifier);
     }
 
-    @Override
+   /* @Override
     public ASTNode visitCompareColumnName(MySQLStatementParser.CompareColumnNameContext ctx) {
         IdentifierSegment identifier = (IdentifierSegment) visit(ctx.identifier());
         return new CompareColumnNameSegment(identifier);
-    }
+    }*/
 
     @Override
     public ASTNode visitComparisonOperator(MySQLStatementParser.ComparisonOperatorContext ctx) {

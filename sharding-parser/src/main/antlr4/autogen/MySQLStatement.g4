@@ -6,6 +6,6 @@ import Symbol, SQLStatement;
 execute
     : (use
     | insert
-    | select
+    | selectClause
     ) SEMI_?
     ;
