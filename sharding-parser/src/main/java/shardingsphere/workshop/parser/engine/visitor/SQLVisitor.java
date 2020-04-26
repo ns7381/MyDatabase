@@ -63,8 +63,7 @@ public final class SQLVisitor extends MySQLStatementBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitComparisonOperator(MySQLStatementParser.ComparisonOperatorContext ctx) {
-        IdentifierSegment identifier = (IdentifierSegment) visit(ctx.identifier());
-        return new CompareColumnNameSegment(identifier);
+        return new ComparisonOperatorSegment(ctx.getText());
     }
 
     @Override

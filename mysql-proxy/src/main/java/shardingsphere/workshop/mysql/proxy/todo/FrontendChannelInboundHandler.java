@@ -30,9 +30,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public final class FrontendChannelInboundHandler extends ChannelInboundHandlerAdapter {
-    
+
     private final MySQLAuthenticationHandler authHandler = new MySQLAuthenticationHandler();
-    
+
     private boolean authorized;
 
 
@@ -40,7 +40,7 @@ public final class FrontendChannelInboundHandler extends ChannelInboundHandlerAd
     public void channelActive(final ChannelHandlerContext context) {
         authHandler.handshake(context);
     }
-    
+
     @Override
     public void channelRead(final ChannelHandlerContext context, final Object message) {
         if (!authorized) {
@@ -54,12 +54,12 @@ public final class FrontendChannelInboundHandler extends ChannelInboundHandlerAd
             context.writeAndFlush(MySQLErrPacketFactory.newInstance(1, ex));
         }
     }
-    
+
     @Override
     public void channelInactive(final ChannelHandlerContext context) {
         context.fireChannelInactive();
     }
-    
+
     private boolean auth(final ChannelHandlerContext context, final ByteBuf message) {
         try (MySQLPacketPayload payload = new MySQLPacketPayload(message)) {
             return authHandler.auth(context, payload);
@@ -69,7 +69,7 @@ public final class FrontendChannelInboundHandler extends ChannelInboundHandlerAd
         }
         return false;
     }
-    
+
     private void executeCommand(final ChannelHandlerContext context, final MySQLPacketPayload payload) {
         Preconditions.checkState(0x03 == payload.readInt1(), "only support COM_QUERY command type");
         // TODO 1. Read SQL from payload, then system.out it
@@ -97,8 +97,8 @@ public final class FrontendChannelInboundHandler extends ChannelInboundHandlerAd
             int size = result.size();
             int index = 0;
             for (int i = 0; i < size; i++) {
-                int value = Integer.parseInt(result.get(i));
-                switch
+                int res = Integer.parseInt(result.get(i));
+//                switch
                 context.write(new MySQLTextResultSetRowPacket(4 + i, ImmutableList.of()));
             }
             context.write(new MySQLEofPacket(4 + size));

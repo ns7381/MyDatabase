@@ -11,8 +11,8 @@ import shardingsphere.workshop.mysql.proxy.fixture.DatabaseProxy;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Bootstrap {
-    
-    private static final int DEFAULT_PORT = 3308;
+
+    private static final int DEFAULT_PORT = 3307;
 
     /**
      * Main entrance.
@@ -22,7 +22,7 @@ public final class Bootstrap {
     public static void main(final String[] args) {
         DatabaseProxy.getInstance().start(getPort(args));
     }
-    
+
     private static int getPort(final String[] args) {
         if (0 == args.length) {
             return DEFAULT_PORT;

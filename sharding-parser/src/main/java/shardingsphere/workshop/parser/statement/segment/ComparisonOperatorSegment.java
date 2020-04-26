@@ -13,6 +13,6 @@ import shardingsphere.workshop.parser.statement.ASTNode;
 @RequiredArgsConstructor
 @Getter
 public final class ComparisonOperatorSegment implements ASTNode {
-    
-    private final IdentifierSegment identifier;
+
+    private final String value;
 }
