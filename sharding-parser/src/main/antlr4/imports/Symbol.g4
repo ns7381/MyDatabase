@@ -1,4 +1,3 @@
-
 lexer grammar Symbol;
 
 AND_:                '&&';
@@ -41,3 +40,4 @@ BQ_:                 '`';
 QUESTION_:           '?';
 AT_:                 '@';
 SEMI_:               ';';
+

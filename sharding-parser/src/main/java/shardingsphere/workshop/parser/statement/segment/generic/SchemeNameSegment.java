@@ -1,9 +1,10 @@
 
-package shardingsphere.workshop.parser.statement.segment;
+package shardingsphere.workshop.parser.statement.segment.generic;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import shardingsphere.workshop.parser.statement.ASTNode;
+import shardingsphere.workshop.parser.statement.segment.IdentifierSegment;
 
 /**
  * Scheme name segment.
@@ -12,7 +13,7 @@ import shardingsphere.workshop.parser.statement.ASTNode;
  */
 @RequiredArgsConstructor
 @Getter
-public final class ValueSegment implements ASTNode {
-    
+public final class SchemeNameSegment implements ASTNode {
+
     private final IdentifierSegment identifier;
 }

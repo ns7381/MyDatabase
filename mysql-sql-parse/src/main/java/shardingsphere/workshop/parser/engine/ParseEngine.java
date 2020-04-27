@@ -38,7 +38,7 @@ public final class ParseEngine {
     }
 
     public static void main(String[] args) {
-        ASTNode test = parse("select id from test");
+        ASTNode test = parse("SELECT 'id' FROM 'test'");
 
         System.out.println();
         System.out.println(test);

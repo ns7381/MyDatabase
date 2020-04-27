@@ -19,7 +19,20 @@ public final class SQLVisitor extends MySqlParserBaseVisitor<ASTNode> {
      * @param ctx
      */
     @Override
-    public ASTNode visitSqlStatements(MySqlParser.SqlStatementsContext ctx) {
-        return super.visitSqlStatements(ctx);
+    public ASTNode visitSelectElements(MySqlParser.SelectElementsContext ctx) {
+        return super.visitSelectElements(ctx);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.</p>
+     *
+     * @param ctx
+     */
+    @Override
+    public ASTNode visitTableSources(MySqlParser.TableSourcesContext ctx) {
+        return super.visitTableSources(ctx);
     }
 }

@@ -5,14 +5,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import shardingsphere.workshop.parser.statement.ASTNode;
 
+import java.util.Collection;
+
 /**
- * Scheme name segment.
- *
- * @author panjuan
+ * Insert columns segment.
  */
 @RequiredArgsConstructor
 @Getter
-public final class ComparisonOperatorSegment implements ASTNode {
+public final class InsertColumnsSegment implements ASTNode {
 
-    private final String value;
+    private final Collection<ColumnSegment> columns;
 }

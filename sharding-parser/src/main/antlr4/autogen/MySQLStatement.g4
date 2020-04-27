@@ -1,11 +1,22 @@
 
 grammar MySQLStatement;
 
-import Symbol, SQLStatement;
+import Symbol, Comments, DMLStatement, DDLStatement, DALStatement;
 
 execute
     : (use
+    | select
     | insert
-    | selectClause
+    | update
+    | delete
+    | createTable
+    | alterTable
+    | truncateTable
+    | dropTable
+    | showTables
+    | createIndex
+    | dropIndex
+    | createDatabase
+    | showDatabases
     ) SEMI_?
     ;

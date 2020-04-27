@@ -9,7 +9,7 @@ IDENTIFIER_
     | (DQ_ ( '\\'. | '""' | ~('"'| '\\') )* DQ_)
     ;
 
-STRING_ 
+STRING_
     : (DQ_ ( '\\'. | '""' | ~('"'| '\\') )* DQ_)
     | (SQ_ ('\\'. | '\'\'' | ~('\'' | '\\'))* SQ_)
     ;
@@ -25,11 +25,31 @@ HEX_DIGIT_
 BIT_NUM_
     : '0b' ('0' | '1')+ | B SQ_ ('0' | '1')+ SQ_
     ;
-    
-INT_
+
+INNODB_
+    : 'INNODB'
+    ;
+
+TLS_
+    : 'TLS'
+    ;
+
+Y_N_
+    : ('Y' | 'N')
+    ;
+
+NOT_SUPPORT_
+    : 'not support'
+    ;
+
+FILESIZE_LITERAL
+    : INT_ ('K'|'M'|'G'|'T')
+    ;
+
+fragment INT_
     : [0-9]+
     ;
 
-HEX_
+fragment HEX_
     : [0-9a-fA-F]
     ;

@@ -23,6 +23,8 @@ import shardingsphere.workshop.parser.statement.statement.SelectStatement;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Frontend channel inbound handler.
@@ -48,7 +50,8 @@ public final class FrontendChannelInboundHandler extends ChannelInboundHandlerAd
             return;
         }
         try (MySQLPacketPayload payload = new MySQLPacketPayload((ByteBuf) message)) {
-            executeCommand(context, payload);
+//            executeCommand(context, payload);
+            Executors.newCachedThreadPool().execute(new CommandExecutorTask(context, payload));
         } catch (final Exception ex) {
             log.error("Exception occur: ", ex);
             context.writeAndFlush(MySQLErrPacketFactory.newInstance(1, ex));
@@ -83,7 +86,7 @@ public final class FrontendChannelInboundHandler extends ChannelInboundHandlerAd
         context.write(new MySQLTextResultSetRowPacket(4, ImmutableList.of(100)));
         context.write(new MySQLEofPacket(5));*/
         // TODO 3. Parse SQL, return actual data according to SQLStatement
-        SelectStatement statement = (SelectStatement) ParseEngine.parse(sql);
+        /*SelectStatement statement = (SelectStatement) ParseEngine.parse(sql);
         String tableName = statement.getTableName().getIdentifier().getValue();
         String columnName = statement.getColumnName().getIdentifier().getValue();
         String compareColumnName = statement.getCompareColumnName().getIdentifier().getValue();
@@ -104,7 +107,7 @@ public final class FrontendChannelInboundHandler extends ChannelInboundHandlerAd
             context.write(new MySQLEofPacket(4 + size));
         } else {
             context.write(new MySQLEofPacket(5));
-        }
+        }*/
 
         context.flush();
     }

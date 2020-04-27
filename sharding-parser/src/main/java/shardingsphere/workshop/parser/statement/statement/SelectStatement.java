@@ -2,22 +2,21 @@
 package shardingsphere.workshop.parser.statement.statement;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import shardingsphere.workshop.parser.statement.ASTNode;
 import shardingsphere.workshop.parser.statement.segment.*;
+import shardingsphere.workshop.parser.statement.segment.projection.ProjectionsSegment;
 
 /**
  * Use statement.
  *
  * @author panjuan
  */
-@RequiredArgsConstructor
 @Getter
+@Setter
 public final class SelectStatement implements ASTNode {
 
-    private final TableNameSegment tableName;
-    private final ColumnNameSegment columnName;
-    private final CompareColumnNameSegment compareColumnName;
-    private final ComparisonOperatorSegment comparisonOperator;
-    private final ValueSegment value;
+    private TableNameSegment tableName;
+    private ProjectionsSegment projections;
+    private WhereSegment where;
 }

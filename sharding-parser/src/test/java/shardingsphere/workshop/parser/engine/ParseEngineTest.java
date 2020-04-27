@@ -1,31 +1,17 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package shardingsphere.workshop.parser.engine;
 
 import org.junit.Test;
+import shardingsphere.workshop.parser.statement.statement.CreateTableStatement;
+import shardingsphere.workshop.parser.statement.statement.InsertStatement;
 import shardingsphere.workshop.parser.statement.statement.SelectStatement;
 import shardingsphere.workshop.parser.statement.statement.UseStatement;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public final class ParseEngineTest {
-    
+
     @Test
     public void testParse() {
         String sql = "use sharding_db";
@@ -34,9 +20,31 @@ public final class ParseEngineTest {
     }
 
     @Test
+    public void testParseCreateTable() {
+        String sql = "CREATE TABLE IF NOT EXISTS t_order(\n" +
+                "   id INT UNSIGNED AUTO_INCREMENT,\n" +
+                "   name VARCHAR(100) NOT NULL,\n" +
+                "   creator VARCHAR(40) NOT NULL,\n" +
+                "   create_date DATE,\n" +
+                "   PRIMARY KEY ( id )\n" +
+                ");";
+        CreateTableStatement statement = (CreateTableStatement) ParseEngine.parse(sql);
+        assertThat(statement.getTable().getName().getValue(), is("t_order"));
+    }
+
+    @Test
+    public void testParseInsert() {
+        String sql = "INSERT INTO t_order ( id, name, creator )\n" +
+                "                       VALUES\n" +
+                "                       ( 1, 'n1', 'c1' );";
+        InsertStatement statement = (InsertStatement) ParseEngine.parse(sql);
+        assertThat(statement.getTable().getName().getValue(), is("t_order"));
+    }
+
+    @Test
     public void testParseSelect() {
-        String sql = "select id from t_order";
+        String sql = "select * from t_order where id > 10";
         SelectStatement statement = (SelectStatement) ParseEngine.parse(sql);
-        assertThat(statement.getColumnName().getIdentifier().getValue(), is("id"));
+        assertThat(statement.getTableName().getName().getValue(), is("t_order"));
     }
 }
