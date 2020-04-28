@@ -6,5 +6,5 @@ import shardingsphere.workshop.parser.statement.ASTNode;
 /**
  * Create database statement.
  */
-public final class CreateDatabaseStatement implements ASTNode {
+public final class CreateDatabaseStatement implements SQLStatement {
 }

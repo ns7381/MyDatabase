@@ -14,7 +14,7 @@ import shardingsphere.workshop.parser.statement.segment.projection.ProjectionsSe
  */
 @Getter
 @Setter
-public final class SelectStatement implements ASTNode {
+public final class SelectStatement implements SQLStatement {
 
     private TableNameSegment tableName;
     private ProjectionsSegment projections;

@@ -4,7 +4,6 @@ package shardingsphere.workshop.mysql.proxy;
 import com.google.common.primitives.Ints;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import shardingsphere.workshop.mysql.proxy.fixture.DatabaseProxy;
 
 /**
  * Database-proxy Bootstrap.

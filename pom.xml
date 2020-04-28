@@ -7,6 +7,10 @@
     <modules>
         <module>sharding-parser</module>
         <module>mysql-proxy</module>
+        <module>execute-engine</module>
+        <module>mysql-protocol</module>
+        <module>storage-engine/storage-engine-lsmdb</module>
+        <!--        <module>mysql-sql-parse</module>--><!-- antlr4 grammer provide mysql parse definition -->
     </modules>
     <packaging>pom</packaging>
     

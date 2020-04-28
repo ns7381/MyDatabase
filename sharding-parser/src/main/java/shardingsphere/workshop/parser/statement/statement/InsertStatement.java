@@ -18,7 +18,7 @@ import java.util.LinkedList;
  */
 @Getter
 @Setter
-public final class InsertStatement implements ASTNode {
+public final class InsertStatement implements SQLStatement {
 
     private TableNameSegment table;
     private InsertColumnsSegment insertColumns;

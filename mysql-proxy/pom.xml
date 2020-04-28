@@ -8,13 +8,18 @@
         <artifactId>shardingsphere-workshop</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    
+
     <artifactId>mysql-proxy</artifactId>
-    
+
     <dependencies>
         <dependency>
             <groupId>shardingsphere.workshop</groupId>
-            <artifactId>sharding-parser</artifactId>
+            <artifactId>execute-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>shardingsphere.workshop</groupId>
+            <artifactId>mysql-protocol</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -33,7 +38,7 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>

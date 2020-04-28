@@ -16,7 +16,7 @@ import java.util.LinkedList;
  */
 @RequiredArgsConstructor
 @Getter
-public final class CreateTableStatement implements ASTNode {
+public final class CreateTableStatement implements SQLStatement {
 
     private final TableNameSegment table;
 

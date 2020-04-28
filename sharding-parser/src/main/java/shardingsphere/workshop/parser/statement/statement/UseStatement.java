@@ -13,7 +13,7 @@ import shardingsphere.workshop.parser.statement.segment.generic.SchemeNameSegmen
  */
 @RequiredArgsConstructor
 @Getter
-public final class UseStatement implements ASTNode {
+public final class UseStatement implements SQLStatement {
 
     private final SchemeNameSegment schemeName;
 }
