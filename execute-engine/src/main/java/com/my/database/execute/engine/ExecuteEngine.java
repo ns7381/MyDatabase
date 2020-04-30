@@ -1,7 +1,6 @@
 package com.my.database.execute.engine;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.my.database.lsm.table.Row;
 import com.my.database.lsm.table.Table;
 import com.my.database.mysql.protocol.constant.MySQLColumnType;
@@ -15,7 +14,6 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import shardingsphere.workshop.parser.engine.ParseEngine;
 import shardingsphere.workshop.parser.statement.segment.predicate.PredicateCompareRightValue;
-import shardingsphere.workshop.parser.statement.segment.predicate.PredicateRightValue;
 import shardingsphere.workshop.parser.statement.segment.projection.ColumnProjectionSegment;
 import shardingsphere.workshop.parser.statement.segment.projection.ProjectionSegment;
 import shardingsphere.workshop.parser.statement.statement.SQLStatement;
@@ -23,10 +21,6 @@ import shardingsphere.workshop.parser.statement.statement.SelectStatement;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -59,7 +53,7 @@ public final class ExecuteEngine {
             Table table = new Table(tableName, columnNames);
 
             selectStatement.getWhere().getAndPredicates().forEach(predicate -> {
-                predicate.getPredicates().forEach(pre-> {
+                predicate.getPredicates().forEach(pre -> {
                     String columnName = pre.getColumn().getName().getValue();
                     PredicateCompareRightValue rightValue = (PredicateCompareRightValue) pre.getRightValue();
 
@@ -67,10 +61,11 @@ public final class ExecuteEngine {
             });
             Row row100 = table.get("row100");
             context.write(new MySQLFieldCountPacket(1, 1));
-            context.write(new MySQLColumnDefinition41Packet(2, 0, "sharding_db", tableName, tableName, "c1", "c1", 100, MySQLColumnType.MYSQL_TYPE_STRING,0));
+            context.write(new MySQLColumnDefinition41Packet(2, 0, "sharding_db", tableName, tableName, "c1", "c1", 100, MySQLColumnType.MYSQL_TYPE_STRING, 0));
             context.write(new MySQLEofPacket(3));
             context.write(new MySQLTextResultSetRowPacket(4, ImmutableList.of(row100.getCols().get("c1"))));
             context.write(new MySQLEofPacket(5));
+            context.flush();
         }
     }
 }

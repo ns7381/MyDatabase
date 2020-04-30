@@ -1,5 +1,6 @@
 package com.my.database.lsm.block;
 
+import com.my.database.lsm.table.Config;
 import com.my.database.lsm.table.Descriptor;
 import lombok.Getter;
 
@@ -57,7 +58,7 @@ public class DataBlock implements Comparable<DataBlock> {
     }
 
     public File getFile() throws IOException {
-        File dir = new File(new File(desc.getTable(), desc.getNs()), desc.getCf());
+        File dir = new File(new File(Config.STORAGE_DIR + desc.getTable(), desc.getNs()), desc.getCf());
         if (!dir.exists()) {
             dir.mkdirs();
         }

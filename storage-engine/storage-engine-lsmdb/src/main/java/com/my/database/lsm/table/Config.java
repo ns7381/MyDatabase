@@ -13,10 +13,10 @@ import java.util.function.Function;
 @NoArgsConstructor
 public final class Config {
 
-    public static int blockBytesLimit = 1024 * 1024 * 16;
+    public static int blockBytesLimit = 1024 * 1024 * 64;
 
-    public static int rowCacheCapacity = 1024;
-    public static int memTableBytesLimit = 128 * 1;
+    public static int rowCacheCapacity = 1024 * 1024 * 64;
+    public static int memTableBytesLimit = 128;
 
     public static int onDiskLevelsLimit = 3;
     public static int fileBufferSize = 256 * 256;
@@ -25,6 +25,7 @@ public final class Config {
     public static StringHasher hash = new MurMurHasher();
 
     public static String compressorType = "gz";
+    public static final String STORAGE_DIR = "/";
     public static CompressorStreamProvider compressorProvider = new CompressorStreamFactory();
 
     public static Function<Integer, Integer> blocksNumLimitForLevel = level -> ((int) Math.pow(10, level));

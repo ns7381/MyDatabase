@@ -62,43 +62,4 @@ public final class FrontendChannelInboundHandler extends ChannelInboundHandlerAd
         }
         return false;
     }
-
-    private void executeCommand(final ChannelHandlerContext context, final MySQLPacketPayload payload) {
-        Preconditions.checkState(0x03 == payload.readInt1(), "only support COM_QUERY command type");
-        // TODO 1. Read SQL from payload, then system.out it
-        String sql = payload.readStringEOF();
-        System.out.println(sql);
-
-        // TODO 2. Return mock MySQLPacket to client (header: MySQLFieldCountPacket + MySQLColumnDefinition41Packet + MySQLEofPacket, content: MySQLTextResultSetRowPacket
-        /*context.write(new MySQLFieldCountPacket(1, 1));
-        context.write(new MySQLColumnDefinition41Packet(2, 0, "sharding_db", "t_order", "t_order", "order_id", "order_id", 100, MySQLColumnType.MYSQL_TYPE_STRING,0));
-        context.write(new MySQLEofPacket(3));
-        context.write(new MySQLTextResultSetRowPacket(4, ImmutableList.of(100)));
-        context.write(new MySQLEofPacket(5));*/
-        // TODO 3. Parse SQL, return actual data according to SQLStatement
-        /*SelectStatement statement = (SelectStatement) ParseEngine.parse(sql);
-        String tableName = statement.getTableName().getIdentifier().getValue();
-        String columnName = statement.getColumnName().getIdentifier().getValue();
-        String compareColumnName = statement.getCompareColumnName().getIdentifier().getValue();
-        String value = statement.getValue().getIdentifier().getValue();
-        List<String> result = CSV.read(tableName, columnName);
-        System.out.println(result);
-        context.write(new MySQLFieldCountPacket(1, 1));
-        context.write(new MySQLColumnDefinition41Packet(2, 0, "sharding_db", "t_order", "t_order", "order_id", "order_id", 100, MySQLColumnType.MYSQL_TYPE_STRING,0));
-        context.write(new MySQLEofPacket(3));
-        if (result != null) {
-            int size = result.size();
-            int index = 0;
-            for (int i = 0; i < size; i++) {
-                int res = Integer.parseInt(result.get(i));
-//                switch
-                context.write(new MySQLTextResultSetRowPacket(4 + i, ImmutableList.of()));
-            }
-            context.write(new MySQLEofPacket(4 + size));
-        } else {
-            context.write(new MySQLEofPacket(5));
-        }*/
-
-        context.flush();
-    }
 }

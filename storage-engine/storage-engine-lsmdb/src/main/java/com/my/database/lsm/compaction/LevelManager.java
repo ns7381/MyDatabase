@@ -229,7 +229,7 @@ public class LevelManager {
     }
 
     private File getColDir() {
-        File dir = new File(new File(descriptor.getTable(), descriptor.getNs()), descriptor.getCf());
+        File dir = new File(new File(Config.STORAGE_DIR + descriptor.getTable(), descriptor.getNs()), descriptor.getCf());
         File colDir = new File(dir, column);
         if (!colDir.exists()) {
             colDir.mkdirs();
