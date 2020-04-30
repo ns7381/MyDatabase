@@ -22,5 +22,10 @@
             <artifactId>mysql-protocol</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>shardingsphere.workshop</groupId>
+            <artifactId>storage-engine-lsmdb</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
