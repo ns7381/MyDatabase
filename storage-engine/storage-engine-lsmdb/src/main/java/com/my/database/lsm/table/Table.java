@@ -1,6 +1,6 @@
 package com.my.database.lsm.table;
 
-import com.my.database.lsm.exception.StorageEngineException;
+import com.my.database.lsm.exception.LSMStorageEngineException;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
@@ -26,7 +26,7 @@ public class Table {
 
     public void put(Row row) {
         if (StringUtils.isBlank(row.getKey())) {
-            throw new StorageEngineException("Row key is null");
+            throw new LSMStorageEngineException("Row key is null");
         }
         // 1. TODO: save row to wal log
         this.cache.add(new ComparableTimed<>(row));
