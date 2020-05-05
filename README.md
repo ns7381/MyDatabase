@@ -10,7 +10,8 @@ Forked from [shardingsphere-workshop](https://github.com/shardingsphere-workshop
 > storage-engine-api:&nbsp;&nbsp;存储引擎接口层  
 > storage-engine-bplus:&nbsp;&nbsp;基于B+树索引实现的存储引擎  
 > storage-engine-lsm:&nbsp;&nbsp;基于lsm原理实现的存储引擎  
-2. 启动类：mysql-proxy模块shardingsphere.workshop.mysql.proxy.Bootstrap
+2. 启动类：  
+> mysql-proxy模块shardingsphere.workshop.mysql.proxy.Bootstrap
 3. 操作示例：
 ```cmd
 mysql -uroot -proot
