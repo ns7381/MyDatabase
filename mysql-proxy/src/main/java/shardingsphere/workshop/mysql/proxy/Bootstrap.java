@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Bootstrap {
 
-    private static final int DEFAULT_PORT = 3309;
+    private static final int DEFAULT_PORT = 3306;
 
     /**
      * Main entrance.
