@@ -1,6 +1,6 @@
 package com.my.database.bplus.tree;
 
-import com.my.database.bplus.operator.Tuple;
+import com.my.database.bplus.db.Tuple;
 import org.junit.Test;
 
 import java.util.Hashtable;

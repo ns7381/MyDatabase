@@ -1,12 +1,9 @@
-package com.my.database.bplus.operator;
+package com.my.database.bplus.db;
 
-import com.my.database.bplus.exception.BPlusEngineException;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Map;
 
 public class DatabaseTest {
 	@Test
@@ -26,7 +23,7 @@ public class DatabaseTest {
 		database.init();
 		Hashtable<String, Object> col = new Hashtable<String, Object>();
 		col.put("id", Integer.valueOf("2"));
-		col.put("name", "xiao");
+		col.put("name", "ming");
 		database.insertIntoTable("user", col);
 	}
 	@Test
@@ -45,7 +42,6 @@ public class DatabaseTest {
 		Database database = new Database();
 		database.init();
 		Hashtable<String, Object> col = new Hashtable<String, Object>();
-		col.put("id", Integer.valueOf("1"));
 		Iterator<Tuple> tuples = database.selectFromTable("user", col, "and");
 		while (tuples.hasNext()) {
 			System.out.println(tuples.next());

@@ -1,4 +1,4 @@
-package com.my.database.bplus.operator;
+package com.my.database.bplus.db;
 
 
 import com.my.database.bplus.exception.BPlusEngineException;
@@ -25,27 +25,27 @@ public class Database {
     }
 
     public void createTable(String tableName, Hashtable<String, String> colType,
-                            Hashtable<String, String> colRef, String strKeyColName) throws BPlusEngineException, IOException {
+                            Hashtable<String, String> colRef, String keyColName) throws BPlusEngineException, IOException {
         if (tableName.contains("#")) {
             throw new BPlusEngineException("You can not use the character # in a table's Name");
         }
         if (tableMeta.containsKey(tableName)) {
             return;
         }
-        Table newTable = new Table(tableName, colType, colRef, strKeyColName);
+        Table newTable = new Table(tableName, colType, colRef, keyColName);
         tableMeta.put(tableName, newTable);
     }
 
-    public void createIndex(String strTableName, String strColName)
+    public void createIndex(String tableName, String strColName)
             throws ClassNotFoundException, BPlusEngineException, IOException {
         BPlusTree index = new BPlusTree(BTreeDegree);
-        Table toIndexTable = tableMeta.get(strTableName);
-        Iterator<Tuple> all = selectFromTable(strTableName, new Hashtable<String, Object>(), "or");
+        Table toIndexTable = tableMeta.get(tableName);
+        Iterator<Tuple> all = selectFromTable(tableName, new Hashtable<String, Object>(), "or");
         int i = 0;
         while (all.hasNext()) {
             Tuple currTuple = all.next();
             index.insert((Comparable) currTuple.data.get(strColName),
-                    strTableName + "#" + currTuple.getPageNo() + "#" + i % configSize);
+                    tableName + "#" + currTuple.getPageNo() + "#" + i % configSize);
             i++;
         }
         toIndexTable.colNameBTree.put(strColName, index);
@@ -53,57 +53,57 @@ public class Database {
     }
 
     /**
-     * Inserts into the table strTableName and saves it to disk immediately, your data is always safe
+     * Inserts into the table tableName and saves it to disk immediately, your data is always safe
      */
-    public void insertIntoTable(String strTableName, Hashtable<String, Object> col)
+    public void insertIntoTable(String tableName, Hashtable<String, Object> col)
             throws BPlusEngineException, ClassNotFoundException, IOException {
-        if (!tableMeta.containsKey(strTableName)) {
+        if (!tableMeta.containsKey(tableName)) {
             throw new BPlusEngineException("Table Does not exist");
         }
 
-        Table toInsert = tableMeta.get(strTableName);
+        Table toInsert = tableMeta.get(tableName);
         int pageNo = toInsert.pageCount;
         Page lastPage;
 
-        lastPage = Page.load(strTableName + "#" + pageNo);
+        lastPage = Page.load(tableName + "#" + pageNo);
         if (!lastPage.isFull()) {
             lastPage.addToPage(col);
         } else {
-            lastPage = new Page(configSize, strTableName + "#" + (pageNo + 1));
+            lastPage = new Page(configSize, tableName + "#" + (pageNo + 1));
             lastPage.addToPage(col);
             toInsert.pageCount++; // updateTable;
             toInsert.save();
         }
-        tableMeta.remove(strTableName);
-        tableMeta.put(strTableName, toInsert);
+        tableMeta.remove(tableName);
+        tableMeta.put(tableName, toInsert);
     }
 
     /**
      * gets the page No from the primary key index and searches the tuples in
      * O(n) time to update the tuple and it's time
      */
-    public void updateTable(String strTableName, Object keyToUpdateData, Hashtable<String, Object> htblColNameValue)
+    public void updateTable(String tableName, Object keyToUpdateData, Hashtable<String, Object> colValue)
             throws ClassNotFoundException, IOException, BPlusEngineException {
         // Using Btree Done
-        Table myTable = tableMeta.get(strTableName);
+        Table myTable = tableMeta.get(tableName);
         BPlusTree thisTree = myTable.getPrimaryKeys();
 
         // wet
         Hashtable<String, Object> htbl = new Hashtable<String, Object>();
         htbl.put(myTable.primaryKey, keyToUpdateData);
-        Iterator<Tuple> found = selectFromTable(strTableName, htbl, "OR");
+        Iterator<Tuple> found = selectFromTable(tableName, htbl, "OR");
 
         if (!found.hasNext()) {
             throw new BPlusEngineException("Item not found to update");
         }
 
         Tuple currTuple = found.next();
-        if (!htblColNameValue.containsKey(myTable.primaryKey)) {
-            Enumeration<String> keysToCompare = htblColNameValue.keys();
+        if (!colValue.containsKey(myTable.primaryKey)) {
+            Enumeration<String> keysToCompare = colValue.keys();
             while (keysToCompare.hasMoreElements()) {
                 String currKey = keysToCompare.nextElement();
-                Page x = Page.load(strTableName + "#" + currTuple.getPageNo());
-                x.getTuples().get(currTuple.location).data.replace(currKey, htblColNameValue.get(currKey));
+                Page x = Page.load(tableName + "#" + currTuple.getPageNo());
+                x.getTuples().get(currTuple.location).data.replace(currKey, colValue.get(currKey));
                 x.save();
             }
         } else {
@@ -114,15 +114,15 @@ public class Database {
     /**
      * to implement try keeping the code dry by using select
      */
-    public void deleteFromTable(String strTableName, Hashtable<String, Object> htblColNameValue, String strOperator)
+    public void deleteFromTable(String tableName, Hashtable<String, Object> colValue, String strOperator)
             throws BPlusEngineException, ClassNotFoundException, IOException {
-        Hashtable indexes = tableMeta.get(strTableName).getBTreeIndexes();
+        Hashtable indexes = tableMeta.get(tableName).getBTreeIndexes();
         Enumeration<String> indexColumns = indexes.keys();
-        Iterator<Tuple> toDelete = selectFromTable(strTableName, htblColNameValue, strOperator);
+        Iterator<Tuple> toDelete = selectFromTable(tableName, colValue, strOperator);
         boolean done = false;
         while (toDelete.hasNext()) {
             Tuple currTuple = toDelete.next();
-            Page x = Page.load(strTableName + "#" + currTuple.getPageNo());
+            Page x = Page.load(tableName + "#" + currTuple.getPageNo());
             currTuple.setDeleted(true);
             x.getTuples().get(currTuple.location).setDeleted(true);
             done = true;
@@ -137,14 +137,14 @@ public class Database {
         }
         // delete from table
         if (!done) {
-            selectOrDel(strTableName, htblColNameValue, strOperator, true);
+            selectOrDel(tableName, colValue, strOperator, true);
         }
     }
 
-    public Iterator<Tuple> selectFromTable(String strTable, Hashtable<String, Object> selectCol,
+    public Iterator<Tuple> selectFromTable(String tableName, Hashtable<String, Object> selectCol,
                                            String strOperator) throws ClassNotFoundException, IOException {
         strOperator = strOperator.toLowerCase();
-        Table thisTable = tableMeta.get(strTable);
+        Table thisTable = tableMeta.get(tableName);
         if ("and".equals(strOperator)) {
             boolean byIndex = false;
             Enumeration<String> keySearch = selectCol.keys();
@@ -159,28 +159,28 @@ public class Database {
                 return selectByIndex(thisTable, selectCol, strOperator);
             }
         }
-        return selectOrDel(strTable, selectCol, strOperator, false);
+        return selectOrDel(tableName, selectCol, strOperator, false);
     }
 
-    private Iterator<Tuple> selectByIndex(Table thisTable, Hashtable<String, Object> htblColNameValue,
+    private Iterator<Tuple> selectByIndex(Table table, Hashtable<String, Object> selectCol,
                                           String strOperator) throws ClassNotFoundException, IOException {
-        Enumeration<String> keys = htblColNameValue.keys();
+        Enumeration<String> keys = selectCol.keys();
         if (!keys.hasMoreElements()) {
-            return displayTable(thisTable.tableName);
+            return displayTable(table.tableName);
         }
 
-        Hashtable<String, BPlusTree> indexes = thisTable.getBTreeIndexes();
+        Hashtable<String, BPlusTree> indexes = table.getBTreeIndexes();
         ArrayList<Tuple> list = new ArrayList<Tuple>();
         String currKey = keys.nextElement();
-        if (!thisTable.colNameBTree.contains(currKey)) {
+        if (!table.colNameBTree.contains(currKey)) {
             while (keys.hasMoreElements()) {
                 currKey = keys.nextElement();
-                if (thisTable.colNameBTree.contains(currKey)) {
+                if (table.colNameBTree.contains(currKey)) {
                     break;
                 }
             }
         }
-        ArrayList<String> foundPages = indexes.get(currKey).search((Comparable) htblColNameValue.get(currKey));
+        ArrayList<String> foundPages = indexes.get(currKey).search((Comparable) selectCol.get(currKey));
         ArrayList<Tuple> found = new ArrayList<Tuple>();
 
         for (int i = 0; i < foundPages.size(); i++) {
@@ -197,7 +197,7 @@ public class Database {
             boolean toSelect = true;
             while (keys.hasMoreElements()) {
                 currKey = keys.nextElement();
-                if (!found.get(i).data.get(currKey).equals(htblColNameValue.get(currKey))) {
+                if (!found.get(i).data.get(currKey).equals(selectCol.get(currKey))) {
                     toSelect = false;
                 }
             }
@@ -223,13 +223,13 @@ public class Database {
         return list.iterator();
     }
 
-    private Iterator<Tuple> selectOrDel(String strTable, Hashtable<String, Object> selectCol, String strOperator,
+    private Iterator<Tuple> selectOrDel(String tableName, Hashtable<String, Object> selectCol, String strOperator,
                                         boolean delete) throws ClassNotFoundException, IOException {
         if (selectCol.isEmpty()) {
-            return displayTable(strTable);
+            return displayTable(tableName);
         }
         ArrayList<Tuple> list = new ArrayList<Tuple>();
-        Page myPage = Page.load(strTable + "#1");
+        Page myPage = Page.load(tableName + "#1");
         while (myPage != null) {
             for (int j = 0; j < myPage.getTuples().size(); j++) {
                 Tuple currTuple = myPage.getTuples().get(j);

@@ -1,4 +1,4 @@
-package com.my.database.bplus.operator;
+package com.my.database.bplus.db;
 
 
 import com.my.database.bplus.exception.BPlusEngineException;
@@ -143,12 +143,12 @@ public class Page implements Serializable {
      */
     private boolean switchTypes(String colType, Object obj) throws BPlusEngineException {
         switch (colType) {
-            case "Integer":
+            case "INT":
                 if (obj instanceof Integer) {
 					return true;
 				}
                 break;
-            case "String":
+            case "VARCHAR":
                 if (obj instanceof String) {
 					return true;
 				}
@@ -163,7 +163,7 @@ public class Page implements Serializable {
 					return true;
 				}
                 break;
-            case "Date":
+            case "DATE":
                 if (obj instanceof Date) {
 					return true;
 				}

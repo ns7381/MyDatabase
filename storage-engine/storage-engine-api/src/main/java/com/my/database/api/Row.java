@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -12,6 +14,14 @@ import java.util.List;
 @AllArgsConstructor
 public class Row {
     private List<Cell> cells;
+
+    public Row() {
+        cells = new ArrayList<>();
+    }
+
+    public Row(Cell... cells) {
+        this(Arrays.asList(cells));
+    }
 
     @Override
     public boolean equals(Object o) {

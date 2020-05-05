@@ -43,7 +43,7 @@ public final class ParseEngineTest {
 
     @Test
     public void testParseSelect() {
-        String sql = "select * from t_order where id > 10";
+        String sql = "select * from t_order where id > 10 and id <20";
         SelectStatement statement = (SelectStatement) ParseEngine.parse(sql);
         assertThat(statement.getTableName().getName().getValue(), is("t_order"));
     }
