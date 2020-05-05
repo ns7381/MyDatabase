@@ -132,37 +132,35 @@ public final class ExecuteEngine {
             }
         }
 
-        selectStatement.getWhere().getAndPredicates().forEach(predicate -> {
-            predicate.getPredicates().forEach(pre -> {
-                String columnName = pre.getColumn().getName().getValue();
-                PredicateCompareRightValue rightValue = (PredicateCompareRightValue) pre.getRightValue();
-                FilterOperator filterOperator = new FilterOperator(row -> {
-                    AtomicBoolean isFilter = new AtomicBoolean(false);
-                    row.getCells().stream().filter(cell -> columnName.equals(cell.getName())).forEach(cell -> {
-                        LiteralExpressionSegment expression = (LiteralExpressionSegment) rightValue.getExpression();
-                        Object compareVal = expression.getLiterals();
-                        switch (rightValue.getOperator()) {
-                            case "=":
-                                isFilter.set(cell.getVal().equals(compareVal));
-                                break;
-                            case ">=":
-                                isFilter.set((Integer) cell.getVal() >= (Integer) compareVal);
-                                break;
-                            case ">":
-                                isFilter.set((Integer) cell.getVal() > (Integer) compareVal);
-                                break;
-                            case "<":
-                                isFilter.set((Integer) cell.getVal() < (Integer) compareVal);
-                                break;
-                            case "<=":
-                                isFilter.set((Integer) cell.getVal() <= (Integer) compareVal);
-                                break;
-                        }
-                    });
-                    return isFilter.get();
+        selectStatement.getWhere().getAndPredicate().getPredicates().getValue().forEach(predicate -> {
+            String columnName = predicate.getColumn().getName().getValue();
+            PredicateCompareRightValue rightValue = (PredicateCompareRightValue) predicate.getRightValue();
+            FilterOperator filterOperator = new FilterOperator(row -> {
+                AtomicBoolean isFilter = new AtomicBoolean(false);
+                row.getCells().stream().filter(cell -> columnName.equals(cell.getName())).forEach(cell -> {
+                    LiteralExpressionSegment expression = (LiteralExpressionSegment) rightValue.getExpression();
+                    Object compareVal = expression.getLiterals();
+                    switch (rightValue.getOperator()) {
+                        case "=":
+                            isFilter.set(cell.getVal().equals(compareVal));
+                            break;
+                        case ">=":
+                            isFilter.set((Integer) cell.getVal() >= (Integer) compareVal);
+                            break;
+                        case ">":
+                            isFilter.set((Integer) cell.getVal() > (Integer) compareVal);
+                            break;
+                        case "<":
+                            isFilter.set((Integer) cell.getVal() < (Integer) compareVal);
+                            break;
+                        case "<=":
+                            isFilter.set((Integer) cell.getVal() <= (Integer) compareVal);
+                            break;
+                    }
                 });
-                operators.add(filterOperator);
+                return isFilter.get();
             });
+            operators.add(filterOperator);
         });
 
 

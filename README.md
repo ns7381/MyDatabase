@@ -6,7 +6,7 @@ Forked from [shardingsphere-workshop](https://github.com/shardingsphere-workshop
 > execute-engine:&nbsp;&nbsp;执行引擎，负责sql的执行计划  
 > mysql-protocol:&nbsp;&nbsp;mysql通信协议api  
 > mysql-proxy:&nbsp;&nbsp;mysql基于netty实现mysql代理，负责与mysql client交互  
-> sharding-p arser:&nbsp;&nbsp;sql语法解析  
+> sharding-parser:&nbsp;&nbsp;sql语法解析  
 > storage-engine-api:&nbsp;&nbsp;存储引擎接口层  
 > storage-engine-bplus:&nbsp;&nbsp;基于B+树索引实现的存储引擎  
 > storage-engine-lsm:&nbsp;&nbsp;基于lsm原理实现的存储引擎  
@@ -25,6 +25,7 @@ select * from t_order where id > 1
 select * from t_order where id = 1
 select * from t_order where id < 3
 select id, name from t_order where id = 1
+select id, name from t_order where id >1 and id <3;
 ```
 
 ## 完成情况

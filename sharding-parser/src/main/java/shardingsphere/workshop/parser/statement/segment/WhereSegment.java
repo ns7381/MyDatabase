@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import shardingsphere.workshop.parser.statement.ASTNode;
 import shardingsphere.workshop.parser.statement.segment.predicate.AndPredicate;
+import shardingsphere.workshop.parser.statement.segment.value.CollectionValue;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -18,5 +19,5 @@ import java.util.LinkedList;
 @Setter
 public final class WhereSegment implements ASTNode {
 
-    private final Collection<AndPredicate> andPredicates = new LinkedList<>();
+    private AndPredicate andPredicate;
 }

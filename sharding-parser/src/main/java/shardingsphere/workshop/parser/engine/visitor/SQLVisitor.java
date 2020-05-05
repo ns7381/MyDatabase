@@ -142,21 +142,29 @@ public final class SQLVisitor extends MySQLStatementBaseVisitor<ASTNode> {
     public ASTNode visitWhereClause(MySQLStatementParser.WhereClauseContext ctx) {
         WhereSegment result = new WhereSegment();
         ASTNode segment = visit(ctx.expr());
-        if (segment instanceof PredicateSegment) {
+        if (segment instanceof CollectionValue) {
             AndPredicate andPredicate = new AndPredicate();
-            andPredicate.getPredicates().add((PredicateSegment) segment);
-            result.getAndPredicates().add(andPredicate);
+            andPredicate.setPredicates((CollectionValue<PredicateSegment>) segment);
+            result.setAndPredicate(andPredicate);
         }
         return result;
     }
 
     @Override
     public ASTNode visitExpr(MySQLStatementParser.ExprContext ctx) {
+        CollectionValue<PredicateSegment> predicates = new CollectionValue<>();
         if (null != ctx.booleanPrimary()) {
             return visit(ctx.booleanPrimary());
         }
+
+        for (int i = 0; i < ctx.expr().size(); i++) {
+            ASTNode segment = visit(ctx.expr().get(i));
+            if (segment instanceof PredicateSegment) {
+                predicates.getValue().add((PredicateSegment) segment);
+            }
+        }
         // TODO deal with XOR
-        return visit(ctx.expr().get(0));
+        return predicates;
     }
 
     @Override
